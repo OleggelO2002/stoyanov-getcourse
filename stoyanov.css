@@ -7,7 +7,8 @@
    4. Верхняя панель и поиск
    5. Главная обучения и страница тренинга: баннер, быстрые ссылки,
       тренинги, уроки, правая колонка
-   6. Мобильная версия
+   6. Страница урока
+   7. Мобильная версия
    Классы, которые добавляет наш JS, начинаются с «st-».
    Шрифты (Montserrat, Oswald) подключает JS.
    ===================================================================== */
@@ -1170,7 +1171,340 @@ body {
 
 
 /* =====================================================================
-   6. МОБИЛЬНАЯ ВЕРСИЯ
+   6. СТРАНИЦА УРОКА (body.st-lesson ставит JS)
+   Шапка: .lesson-header-block > .lesson-navigation (пред. | номер | след.) + .header-view
+   Контент: .lite-page.block-set; файлы: .files-row; задание: .lt-lesson-mission-block
+   ===================================================================== */
+.st-lesson .gc-main-content .container {
+  width: auto !important;
+  max-width: calc(var(--st-content-max) + 48px) !important;
+  margin: 0 auto !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+}
+
+/* вложенные .container в блоках урока не должны давать ещё один отступ */
+.st-lesson .gc-main-content .container .container {
+  max-width: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.st-lesson #gcAccountUserMenu ~ .gc-main-content.with-left-menu .lite-page.block-set {
+  width: auto !important;
+}
+
+.st-lesson :is(.breadcrumbs, .breadcrumb) {
+  margin: 28px 0 12px !important;
+  padding: 0 !important;
+  list-style: none;
+  background: transparent !important;
+  font: 500 13px/1.3 var(--st-font);
+}
+
+.st-lesson :is(.breadcrumbs, .breadcrumb) li {
+  display: inline;
+}
+
+.st-lesson :is(.breadcrumbs, .breadcrumb) a {
+  color: var(--st-muted) !important;
+  text-decoration: none !important;
+}
+
+.st-lesson :is(.breadcrumbs, .breadcrumb) a:hover {
+  color: var(--st-accent) !important;
+}
+
+/* --- шапка урока: белая карточка с мягким синим свечением --- */
+.st-lesson .lesson-header-block.row-section {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  margin: 0 0 36px !important;
+  padding: 24px 28px 52px !important;
+  overflow: hidden;
+  border: 0 !important;
+  border-radius: var(--st-r-m);
+  background:
+    radial-gradient(40% 130% at 32% 120%, rgba(1, 67, 206, 0.32) 0%, rgba(1, 67, 206, 0) 100%),
+    radial-gradient(34% 120% at 82% 105%, rgba(110, 155, 255, 0.5) 0%, rgba(110, 155, 255, 0) 100%),
+    var(--st-surface) !important;
+}
+
+/* навигация сверху, название ниже — как в макете */
+.st-lesson .lesson-header-block .lesson-navigation {
+  order: 1;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.st-lesson .lesson-header-block .header-view {
+  order: 2;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: center;
+  background: transparent !important;
+}
+
+.st-lesson .lesson-navigation :is(table, tr, td) {
+  border: 0 !important;
+  background: transparent !important;
+  vertical-align: middle !important;
+}
+
+.st-lesson .lesson-navigation table {
+  width: 100%;
+}
+
+.st-lesson .lesson-navigation a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 !important;
+  background: transparent !important;
+  color: var(--st-text) !important;
+  font: 500 13px/1.3 var(--st-font) !important;
+  letter-spacing: 0.02em;
+  text-decoration: none !important;
+  transition: color var(--st-ease), gap var(--st-ease);
+}
+
+.st-lesson .lesson-navigation a:hover {
+  gap: 14px;
+  color: var(--st-accent) !important;
+}
+
+/* стрелки GetCourse (иконочный шрифт) заменяем текстовыми */
+.st-lesson .lesson-navigation :is(.fui-arrow-left, .fui-arrow-right) {
+  display: none !important;
+}
+
+.st-lesson .lesson-navigation td:first-child a::before {
+  content: "⟵";
+}
+
+.st-lesson .lesson-navigation td:last-child a::after {
+  content: "⟶";
+}
+
+.st-lesson .lesson-navigation .text-right div.hidden-xs {
+  margin: 0 !important;
+}
+
+/* номер урока — синяя «таблетка» по центру */
+.st-lesson .lesson-navigation .text-center span {
+  display: inline-block;
+  padding: 7px 16px;
+  border-radius: 20px;
+  background: var(--st-accent) !important;
+  color: #FFFFFF !important;
+  font: 600 13px/1.2 var(--st-font) !important;
+}
+
+.st-lesson .lesson-title-value {
+  margin: 0 !important;
+  font: 700 26px/1.3 var(--st-font) !important;
+  letter-spacing: 0.02em;
+  text-align: center !important;
+  text-transform: uppercase !important;
+  color: var(--st-text) !important;
+}
+
+.st-lesson .lesson-description-value {
+  max-width: 720px;
+  margin: 10px auto 0 !important;
+  font: 500 14px/1.5 var(--st-font) !important;
+  color: var(--st-text) !important;
+}
+
+/* --- содержимое урока --- */
+.st-lesson :is(.lite-page, .block-box, .lt-block-wrapper) {
+  background: transparent !important;
+}
+
+.st-lesson .lite-page {
+  font-family: var(--st-font);
+  color: var(--st-text);
+}
+
+.st-lesson .lite-page :is(h1, h2, .text-large h2, .f-header h2, .f-header p) {
+  margin: 28px 0 14px !important;
+  font-family: var(--st-font) !important;
+  font-size: 36px !important;
+  line-height: 1.2 !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.01em;
+  color: var(--st-text) !important;
+}
+
+.st-lesson .lite-page :is(p, li, .f-text) {
+  font-family: var(--st-font) !important;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--st-text) !important;
+}
+
+.st-lesson .lite-page :is(iframe, video, img) {
+  max-width: 100%;
+  border-radius: var(--st-r-m);
+}
+
+/* файлы урока — белые карточки с синей кнопкой */
+.st-lesson .files-row {
+  margin: 0 0 16px !important;
+  overflow: hidden;
+  border: 0 !important;
+  border-radius: var(--st-r-m);
+  background: var(--st-surface) !important;
+}
+
+.st-lesson .files-row td {
+  padding: 18px 22px !important;
+  border: 0 !important;
+  vertical-align: middle !important;
+  font: 600 16px/1.4 var(--st-font);
+  color: var(--st-text) !important;
+}
+
+.st-lesson .files-row td div {
+  width: auto !important;
+  height: auto !important;
+}
+
+.st-lesson .files-row a {
+  color: var(--st-text) !important;
+  text-decoration: none !important;
+}
+
+.st-lesson .files-row td:last-child a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border-radius: 6px;
+  background: var(--st-accent) !important;
+  color: #FFFFFF !important;
+  font: 600 13px/1 var(--st-font);
+  white-space: nowrap;
+  transition: background var(--st-ease), transform var(--st-ease);
+}
+
+.st-lesson .files-row td:last-child a:hover {
+  background: var(--st-accent-hover) !important;
+  transform: translateY(-2px);
+}
+
+/* --- задание и ответ --- */
+.st-lesson .lt-lesson-mission-block .container {
+  margin-top: 40px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.st-lesson .lt-lesson-mission-block h3 {
+  margin: 0 0 14px !important;
+  padding: 0 !important;
+  font: 400 36px/1.2 var(--st-font) !important;
+  color: var(--st-text) !important;
+}
+
+.st-lesson :is(.lesson-mission-text, .lt-lesson-mission-block p) {
+  font: 400 16px/1.6 var(--st-font) !important;
+  color: var(--st-text) !important;
+}
+
+.st-lesson .answer-form {
+  margin-top: 20px;
+  padding: 20px !important;
+  border: 0 !important;
+  border-radius: var(--st-r-m);
+  background: var(--st-surface) !important;
+}
+
+.st-lesson .answer-form textarea {
+  width: 100%;
+  min-height: 140px;
+  padding: 14px 16px !important;
+  border: 1px solid var(--st-bg) !important;
+  border-radius: var(--st-r) !important;
+  background: var(--st-surface) !important;
+  box-shadow: none !important;
+  font: 400 15px/1.5 var(--st-font) !important;
+  color: var(--st-text) !important;
+  transition: border-color var(--st-ease);
+}
+
+.st-lesson .answer-form textarea:focus {
+  border-color: var(--st-accent) !important;
+  outline: none;
+}
+
+.st-lesson .answer-form textarea::placeholder {
+  color: var(--st-placeholder);
+}
+
+.st-lesson .btn-send-answer {
+  padding: 12px 24px !important;
+  border: 0 !important;
+  border-radius: 6px !important;
+  background: var(--st-accent) !important;
+  box-shadow: none !important;
+  color: #FFFFFF !important;
+  font: 600 14px/1 var(--st-font) !important;
+  text-transform: none !important;
+  transition: background var(--st-ease), transform var(--st-ease);
+}
+
+.st-lesson .btn-send-answer:hover {
+  background: var(--st-accent-hover) !important;
+  transform: translateY(-2px);
+}
+
+.st-lesson .btn-save-draft {
+  padding: 12px 20px !important;
+  border: 0 !important;
+  border-radius: 6px !important;
+  background: var(--st-chip) !important;
+  color: var(--st-text) !important;
+  font: 600 14px/1 var(--st-font) !important;
+}
+
+/* ответы учеников и комментарии */
+.st-lesson .lesson-answers-title h3 {
+  font: 400 26px/1.3 var(--st-font) !important;
+  color: var(--st-text) !important;
+}
+
+.st-lesson :is(.answer-text, .lesson-answers-title .pull-right a, .answer-date a, .answer-status a, .user-profile-link .text) {
+  font-family: var(--st-font) !important;
+}
+
+@media (max-width: 768px) {
+  .st-lesson .gc-main-content .container {
+    padding-left: var(--st-gutter) !important;
+    padding-right: var(--st-gutter) !important;
+  }
+
+  .st-lesson .lesson-header-block.row-section {
+    padding: 18px 18px 24px !important;
+  }
+
+  .st-lesson .lesson-title-value { font-size: 19px !important; }
+  .st-lesson .lite-page :is(h1, h2, .text-large h2, .f-header h2, .f-header p) { font-size: 26px !important; }
+  .st-lesson .lt-lesson-mission-block h3 { font-size: 26px !important; }
+
+  .st-lesson .files-row td {
+    padding: 14px 16px !important;
+    font-size: 14px;
+  }
+}
+
+
+/* =====================================================================
+   7. МОБИЛЬНАЯ ВЕРСИЯ
    ===================================================================== */
 @media (max-width: 1280px) {
   :root {

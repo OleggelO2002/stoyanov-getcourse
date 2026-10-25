@@ -7,7 +7,7 @@
    - главная обучения: баннер, быстрые ссылки, картинки тренингов,
      «Вы остановились на уроке», «Актуальные события», «Полезные ссылки»
    - страница тренинга: тот же баннер и правая колонка, уроки карточками
-   - запоминание последнего урока (на странице урока)
+   - страница урока: body.st-lesson для стилей + запоминание последнего урока
    ===================================================================== */
 (function () {
   'use strict';
@@ -639,7 +639,10 @@
 
     const kind = pageKind();
     if (kind) initPage(kind);
-    if (location.pathname.includes('/lesson/view')) waitFor('.lesson-title-value', { timeout: 5000 }).then(trackLesson);
+    if (location.pathname.includes('/lesson/view')) {
+      document.body.classList.add('st-lesson'); // стили страницы урока, раздел 6 в CSS
+      waitFor('.lesson-title-value', { timeout: 5000 }).then(trackLesson);
+    }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
