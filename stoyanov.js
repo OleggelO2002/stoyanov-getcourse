@@ -330,8 +330,17 @@
   /* ===================================================================
      ГЛАВНАЯ ОБУЧЕНИЯ
      =================================================================== */
+  // Главная обучения — список тренингов верхнего уровня. Адрес у школ отличается
+  // (/teach/control, /teach/control/stream, /pl/teach/control/stream...), поэтому подходит
+  // любая страница обучения, где есть .stream-table, кроме страниц внутри тренинга и уроков
+  function isHomePage() {
+    const path = normalizePath(location.pathname);
+    if (CONFIG.homePaths.map(normalizePath).includes(path)) return true;
+    return path.includes('/teach/') && !/\/(view|lesson)(\/|$)/.test(path);
+  }
+
   async function initHome() {
-    const table = await waitFor('.stream-table');
+    const table = await waitFor('.stream-table', { timeout: 5000 });
     if (!table) return;
 
     document.body.classList.add('st-home');
@@ -613,7 +622,7 @@
     const main = document.querySelector('.gc-main-content');
     if (main) initTopbar(main);
 
-    if (CONFIG.homePaths.map(normalizePath).includes(normalizePath(location.pathname))) initHome();
+    if (isHomePage()) initHome();
     if (location.pathname.includes('/lesson/view')) waitFor('.lesson-title-value', { timeout: 5000 }).then(trackLesson);
   }
 
