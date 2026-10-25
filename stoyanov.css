@@ -5,7 +5,8 @@
    2. Каркас страницы
    3. Левое меню
    4. Верхняя панель и поиск
-   5. Главная обучения: баннер, быстрые ссылки, тренинги, правая колонка
+   5. Главная обучения и страница тренинга: баннер, быстрые ссылки,
+      тренинги, уроки, правая колонка
    6. Мобильная версия
    Классы, которые добавляет наш JS, начинаются с «st-».
    Шрифты (Montserrat, Oswald) подключает JS.
@@ -550,10 +551,11 @@ body {
 
 
 /* =====================================================================
-   5. ГЛАВНАЯ ОБУЧЕНИЯ (body.st-home ставит JS)
+   5. ГЛАВНАЯ ОБУЧЕНИЯ И СТРАНИЦА ТРЕНИНГА
+   JS ставит body.st-page и уточняющий класс: .st-home или .st-training
    ===================================================================== */
-.st-home .gc-main-content > .container,
-.st-home .gc-main-content .container {
+.st-page .gc-main-content > .container,
+.st-page .gc-main-content .container {
   width: auto !important;
   max-width: calc(var(--st-content-max) + 48px) !important;
   margin: 0 auto !important;
@@ -673,13 +675,13 @@ body {
 }
 
 /* --- заголовок «Тренинги» --- */
-.st-home .page-header {
+.st-page .page-header {
   margin: 44px 0 24px !important;
   padding: 0 !important;
   border: 0 !important;
 }
 
-.st-home .page-header h1 {
+.st-page .page-header h1 {
   display: flex;
   align-items: center;
   gap: 20px;
@@ -690,7 +692,7 @@ body {
   color: var(--st-text) !important;
 }
 
-.st-home .page-header h1::after {
+.st-page .page-header h1::after {
   content: "";
   flex: 1;
   height: 1px;
@@ -699,7 +701,7 @@ body {
 
 /* --- раскладка: тренинги + правая колонка (классы ставит JS).
    Двойной класс — чтобы перебить правила GetCourse для .row/.col-* --- */
-.st-home .st-layout.st-layout {
+.st-page .st-layout.st-layout {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) var(--st-aside-w);
   gap: var(--st-gap);
@@ -708,13 +710,13 @@ body {
   margin: 0 !important;
 }
 
-.st-home .st-layout.st-layout::before,
-.st-home .st-layout.st-layout::after {
+.st-page .st-layout.st-layout::before,
+.st-page .st-layout.st-layout::after {
   display: none !important;
 }
 
-.st-home .st-layout > .st-main-col.st-main-col,
-.st-home .st-layout > .st-aside-col.st-aside-col {
+.st-page .st-layout > .st-main-col.st-main-col,
+.st-page .st-layout > .st-aside-col.st-aside-col {
   float: none !important;
   flex: none !important;
   width: auto !important;
@@ -725,26 +727,26 @@ body {
 }
 
 /* вложенные колонки внутри колонки тренингов растягиваем на всю ширину */
-.st-home .st-main-col :is([class*="col-md-"], [class*="col-sm-"], [class*="col-lg-"], [class*="col-xs-"]) {
+.st-page .st-main-col :is([class*="col-md-"], [class*="col-sm-"], [class*="col-lg-"], [class*="col-xs-"]) {
   float: none !important;
   width: 100% !important;
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
 
-.st-home .st-main-col .row,
-.st-home .row:has(> .st-layout) {
+.st-page .st-main-col .row,
+.st-page .row:has(> .st-layout) {
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
 
-.st-home .xdget-header {
+.st-page .xdget-header {
   display: none;
 }
 
 /* --- карточки тренингов --- */
 /* таблица → блок: иначе браузер ужимает её по содержимому и сетка карточек сжимается */
-.st-home .stream-table {
+.st-page .stream-table {
   display: block !important;
   width: 100% !important;
   margin: 0 !important;
@@ -752,14 +754,14 @@ body {
   background: transparent !important;
 }
 
-.st-home .stream-table tbody {
+.st-page .stream-table tbody {
   display: grid !important;
   width: 100%;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px var(--st-gap);
 }
 
-.st-home .stream-table tr.training-row {
+.st-page .stream-table tr.training-row {
   display: block;
   position: relative;
   min-height: 200px;
@@ -769,12 +771,12 @@ body {
   transition: transform var(--st-ease), box-shadow var(--st-ease);
 }
 
-.st-home .stream-table tr.training-row:hover {
+.st-page .stream-table tr.training-row:hover {
   transform: translateY(-6px);
   box-shadow: var(--st-shadow-hover);
 }
 
-.st-home .stream-table tr.training-row > td {
+.st-page .stream-table tr.training-row > td {
   display: block;
   height: 100%;
   min-height: inherit;
@@ -783,7 +785,7 @@ body {
   background: transparent !important;
 }
 
-.st-home .stream-table tr.training-row > td > a {
+.st-page .stream-table tr.training-row > td > a {
   position: relative;
   z-index: 2;
   display: flex;
@@ -795,7 +797,7 @@ body {
   text-decoration: none !important;
 }
 
-.st-home .stream-table .stream-title {
+.st-page .stream-table .stream-title {
   display: block;
   overflow-wrap: break-word;
   hyphens: auto;
@@ -805,7 +807,7 @@ body {
 }
 
 /* описание и счётчик уроков, которые GetCourse выводит под названием */
-.st-home .stream-table tr.training-row > td > a > :not(.stream-title) {
+.st-page .stream-table tr.training-row > td > a > :not(.stream-title) {
   display: block;
   max-width: 240px;
   margin: 6px 0 0 !important;
@@ -829,6 +831,126 @@ body {
 
 .training-row:hover .st-card-img {
   transform: translateY(-6px);
+}
+
+/* --- уроки на странице тренинга: ul.lesson-list > li > table(.item-image | .info) --- */
+.st-training .xdget-training,
+.st-training .lesson-list {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.st-training .lesson-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  list-style: none;
+}
+
+.st-training .lesson-list > li {
+  position: relative;
+  margin: 0 !important;
+  padding: 16px 20px !important;
+  border: 0 !important;
+  border-radius: var(--st-r-m);
+  background: var(--st-surface) !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  transition: transform var(--st-ease), box-shadow var(--st-ease);
+}
+
+.st-training .lesson-list > li:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--st-shadow-hover) !important;
+}
+
+/* GetCourse раскладывает карточку таблицей — превращаем в обычные блоки */
+.st-training .lesson-list li :is(table, tbody, tr, td) {
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.st-training .lesson-list li :is(a, .link) {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+/* иконка типа урока в макете не используется */
+.st-training .lesson-list li .item-image {
+  display: none !important;
+}
+
+.st-training .lesson-list li .title {
+  margin: 0 !important;
+  font: 600 16px/1.3 var(--st-font) !important;
+  letter-spacing: 0.02em;
+  color: var(--st-text) !important;
+}
+
+.st-training .lesson-list li .description {
+  margin-top: 6px !important;
+  font: 500 12px/1.4 var(--st-font) !important;
+  letter-spacing: 0.02em;
+  color: var(--st-text) !important;
+}
+
+.st-training .lesson-list li .lesson-date {
+  margin-bottom: 4px;
+  font: 500 11px/1.3 var(--st-font) !important;
+  color: var(--st-muted) !important;
+}
+
+.st-training .lesson-list li .user-state-label {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 3px 8px;
+  border-radius: 5px;
+  background: var(--st-chip);
+  font: 600 11px/1.3 var(--st-font);
+  color: var(--st-muted) !important;
+}
+
+.st-training .lesson-list li .user-state-label:empty {
+  display: none;
+}
+
+/* закрытые уроки — приглушённые */
+.st-training .lesson-list > li.user-state-not_reached {
+  opacity: 0.55;
+}
+
+/* хлебные крошки над заголовком тренинга */
+.st-training :is(.breadcrumbs, .breadcrumb) {
+  margin: 28px 0 0 !important;
+  padding: 0 !important;
+  list-style: none;
+  background: transparent !important;
+  font: 500 13px/1.3 var(--st-font);
+}
+
+.st-training :is(.breadcrumbs, .breadcrumb) li {
+  display: inline;
+}
+
+.st-training :is(.breadcrumbs, .breadcrumb) a {
+  color: var(--st-muted) !important;
+  text-decoration: none !important;
+}
+
+.st-training :is(.breadcrumbs, .breadcrumb) a:hover {
+  color: var(--st-accent) !important;
+}
+
+.st-training :is(.breadcrumbs, .breadcrumb) + .page-header {
+  margin-top: 8px !important;
 }
 
 /* --- правая колонка --- */
@@ -877,7 +999,7 @@ body {
 }
 
 /* виджет расписания GetCourse → карточка «Актуальные события» */
-.st-home .xdget-lessonSchedule {
+.st-page .xdget-lessonSchedule {
   margin: 0 !important;
   padding: 0 !important;
   border-radius: var(--st-r-m);
@@ -885,7 +1007,7 @@ body {
   overflow: hidden;
 }
 
-.st-home .xdget-lessonSchedule h3 {
+.st-page .xdget-lessonSchedule h3 {
   position: relative;
   display: flex;
   align-items: center;
@@ -902,7 +1024,7 @@ body {
   user-select: none;
 }
 
-.st-home .xdget-lessonSchedule h3 .st-icon {
+.st-page .xdget-lessonSchedule h3 .st-icon {
   position: absolute;
   right: 18px;
   top: 50%;
@@ -1054,7 +1176,7 @@ body {
 
 @media (max-width: 1024px) {
   /* тот же селектор, что у основной раскладки, — иначе не перебить */
-  .st-home .st-layout.st-layout {
+  .st-page .st-layout.st-layout {
     grid-template-columns: 1fr;
   }
 
@@ -1199,7 +1321,7 @@ body {
   .st-search__field .st-icon { font-size: 22px; }
   .st-search__input          { font-size: 16px; }
 
-  .st-home .gc-main-content .container {
+  .st-page .gc-main-content .container {
     padding: 8px var(--st-gutter) 48px !important;
   }
 
@@ -1214,33 +1336,33 @@ body {
   .st-quick { margin-top: 16px; }
   .st-quick__item { min-height: 64px; }
 
-  .st-home .page-header { margin: 32px 0 16px !important; }
+  .st-page .page-header { margin: 32px 0 16px !important; }
 
-  .st-home .page-header h1 {
+  .st-page .page-header h1 {
     gap: 14px;
     font-size: 22px !important;
   }
 
-  .st-home .stream-table tbody {
+  .st-page .stream-table tbody {
     grid-template-columns: 1fr;
     gap: 12px;
   }
 
-  .st-home .stream-table tr.training-row,
-  .st-home .stream-table tr.training-row > td > a {
+  .st-page .stream-table tr.training-row,
+  .st-page .stream-table tr.training-row > td > a {
     min-height: 160px;
   }
 
-  .st-home .stream-table tr.training-row > td > a {
+  .st-page .stream-table tr.training-row > td > a {
     padding: 20px 18px;
   }
 
-  .st-home .stream-table .stream-title {
+  .st-page .stream-table .stream-title {
     max-width: 70%;
     font-size: 18px !important;
   }
 
-  .st-home .stream-table tr.training-row > td > a > :not(.stream-title) {
+  .st-page .stream-table tr.training-row > td > a > :not(.stream-title) {
     max-width: 60%;
   }
 
@@ -1252,7 +1374,7 @@ body {
 
   /* на тач-экранах hover «залипает» — отключаем подъём */
   .training-row:hover .st-card-img,
-  .st-home .stream-table tr.training-row:hover {
+  .st-page .stream-table tr.training-row:hover {
     transform: none;
   }
 }

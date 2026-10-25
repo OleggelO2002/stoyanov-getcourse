@@ -6,14 +6,18 @@
    - верхняя панель с поиском
    - главная обучения: баннер, быстрые ссылки, картинки тренингов,
      «Вы остановились на уроке», «Актуальные события», «Полезные ссылки»
+   - страница тренинга: тот же баннер и правая колонка, уроки карточками
    - запоминание последнего урока (на странице урока)
    ===================================================================== */
 (function () {
   'use strict';
 
   const CONFIG = {
-    // страницы, на которых показываем баннер и правую колонку
+    // главная обучения (баннер, быстрые ссылки, правая колонка). Кроме этих адресов
+    // главной считается любая страница обучения со списком тренингов, см. pageKind()
     homePaths: ['/teach/control', '/teach/control/stream'],
+    // страницы тренинга определяются по /stream/view/ — сюда можно добавить свои адреса
+    trainingPaths: [],
 
     // служебные страницы GetCourse (raw-html блоки с переменными)
     usrDataUrl: '/usr-data',               // {first_name};{last_name};{email} — по строке
@@ -330,24 +334,31 @@
   /* ===================================================================
      ГЛАВНАЯ ОБУЧЕНИЯ
      =================================================================== */
-  // Главная обучения — список тренингов верхнего уровня. Адрес у школ отличается
-  // (/teach/control, /teach/control/stream, /pl/teach/control/stream...), поэтому подходит
-  // любая страница обучения, где есть .stream-table, кроме страниц внутри тренинга и уроков
-  function isHomePage() {
+  // 'home' — главная обучения: список тренингов верхнего уровня. Адрес у школ отличается
+  //   (/teach/control, /teach/control/stream, /pl/teach/control/stream...), поэтому подходит
+  //   любая страница обучения, кроме страниц внутри тренинга и уроков; ждём .stream-table.
+  // 'training' — страница тренинга (/stream/view/...): уроки и подтренинги.
+  function pageKind() {
     const path = normalizePath(location.pathname);
-    if (CONFIG.homePaths.map(normalizePath).includes(path)) return true;
-    return path.includes('/teach/') && !/\/(view|lesson)(\/|$)/.test(path);
+    const inList = list => list.map(normalizePath).includes(path);
+    if (inList(CONFIG.trainingPaths) || /\/stream\/view\//.test(path)) return 'training';
+    if (inList(CONFIG.homePaths)) return 'home';
+    if (path.includes('/teach/') && !/\/(view|lesson)(\/|$)/.test(path)) return 'home';
+    return null;
   }
 
-  async function initHome() {
-    const table = await waitFor('.stream-table', { timeout: 5000 });
-    if (!table) return;
+  // Общая сборка главной и страницы тренинга: баннер, заголовок с линией,
+  // карточки слева, правая колонка. Быстрые ссылки — только на главной
+  async function initPage(kind) {
+    const list = await waitFor(kind === 'home' ? '.stream-table' : '.lesson-list, .stream-table', { timeout: 5000 });
+    if (!list) return;
 
-    document.body.classList.add('st-home');
+    document.body.classList.add('st-page', `st-${kind}`);
     const schedule = document.querySelector('.xdget-lessonSchedule');
-    const asideCol = buildLayout(table, schedule);
-    renderTop(asideCol.parentElement);
-    renderTrainingImages(table);
+    const asideCol = buildLayout(list, schedule);
+    renderTop(asideCol.parentElement, { quickLinks: kind === 'home' });
+    const table = document.querySelector('.stream-table');
+    if (table) renderTrainingImages(table);
     renderAside(asideCol, schedule);
   }
 
@@ -379,14 +390,16 @@
     return aside;
   }
 
-  // Баннер и быстрые ссылки — над заголовком «Тренинги»
-  function renderTop(layout) {
+  // Баннер (и на главной — быстрые ссылки) над заголовком страницы
+  function renderTop(layout, { quickLinks }) {
     if (document.querySelector('.st-banner')) return;
 
     const header = document.querySelector('.page-header');
     // заголовок должен идти над обеими колонками, а не только над тренингами
     if (header && layout.contains(header)) layout.before(header);
-    const before = header || layout;
+    // хлебные крошки над заголовком оставляем под баннером, рядом с заголовком
+    const crumbs = header?.previousElementSibling?.matches('.breadcrumbs, .breadcrumb') ? header.previousElementSibling : null;
+    const before = crumbs || header || layout;
 
     const { banner } = CONFIG;
     const bannerEl = h('section', { class: 'st-banner' + (banner.image ? ' st-banner--image' : '') },
@@ -397,10 +410,12 @@
     );
     if (banner.image) bannerEl.style.setProperty('--st-banner-image', `url("${banner.image}")`);
 
+    before.before(bannerEl);
+    if (!quickLinks) return;
+
     // если на странице есть HTML-блок с быстрыми ссылками (quick-links.html) — переносим его,
     // иначе собираем из CONFIG.quickLinks
-    const quick = document.querySelector('.st-quick') || buildQuickLinks();
-    before.before(bannerEl, quick);
+    bannerEl.after(document.querySelector('.st-quick') || buildQuickLinks());
   }
 
   function buildQuickLinks() {
@@ -622,7 +637,8 @@
     const main = document.querySelector('.gc-main-content');
     if (main) initTopbar(main);
 
-    if (isHomePage()) initHome();
+    const kind = pageKind();
+    if (kind) initPage(kind);
     if (location.pathname.includes('/lesson/view')) waitFor('.lesson-title-value', { timeout: 5000 }).then(trackLesson);
   }
 
