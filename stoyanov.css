@@ -1175,12 +1175,46 @@ body {
    Шапка: .lesson-header-block > .lesson-navigation (пред. | номер | след.) + .header-view
    Контент: .lite-page.block-set; файлы: .files-row; задание: .lt-lesson-mission-block
    ===================================================================== */
+/* GetCourse ограничивает блоки урока переменной --container-width (~870px)
+   и max-width у .center-block — расширяем до нашей ширины контента */
+@media (min-width: 769px) {
+  html body.st-lesson {
+    --container-width: min(var(--st-content-max), calc(100vw - var(--st-sidebar-w) - 48px)) !important;
+  }
+}
+
+.st-lesson .center-block {
+  max-width: 100% !important;
+}
+
 .st-lesson .gc-main-content .container {
   width: auto !important;
   max-width: calc(var(--st-content-max) + 48px) !important;
   margin: 0 auto !important;
-  padding-left: 24px !important;
-  padding-right: 24px !important;
+  padding: 24px 24px 64px !important;
+}
+
+/* название тренинга над уроком — компактно, без лишних полей */
+.st-lesson .page-header {
+  margin: 0 0 16px !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.st-lesson .page-header h1 {
+  margin: 0 !important;
+  font: 600 18px/1.3 var(--st-font) !important;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.st-lesson .page-header h1 a {
+  color: var(--st-text) !important;
+  text-decoration: none !important;
+}
+
+.st-lesson .page-header h1 a:hover {
+  color: var(--st-accent) !important;
 }
 
 /* вложенные .container в блоках урока не должны давать ещё один отступ */
@@ -1195,7 +1229,7 @@ body {
 }
 
 .st-lesson :is(.breadcrumbs, .breadcrumb) {
-  margin: 28px 0 12px !important;
+  margin: 0 0 10px !important;
   padding: 0 !important;
   list-style: none;
   background: transparent !important;
@@ -1219,9 +1253,9 @@ body {
 .st-lesson .lesson-header-block.row-section {
   display: flex;
   flex-direction: column;
-  gap: 26px;
-  margin: 0 0 36px !important;
-  padding: 24px 28px 52px !important;
+  gap: 22px;
+  margin: 0 0 28px !important;
+  padding: 22px 28px 40px !important;
   overflow: hidden;
   border: 0 !important;
   border-radius: var(--st-r-m);
