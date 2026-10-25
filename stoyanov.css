@@ -852,8 +852,10 @@ body {
 
 .st-training .lesson-list > li {
   position: relative;
+  height: auto !important;
+  min-height: 0 !important;
   margin: 0 !important;
-  padding: 16px 20px !important;
+  padding: 18px 22px !important;
   border: 0 !important;
   border-radius: var(--st-r-m);
   background: var(--st-surface) !important;
@@ -867,15 +869,19 @@ body {
   box-shadow: var(--st-shadow-hover) !important;
 }
 
-/* GetCourse раскладывает карточку таблицей — превращаем в обычные блоки */
-.st-training .lesson-list li :is(table, tbody, tr, td) {
+/* GetCourse раскладывает карточку таблицей (иконка | статус | текст) — превращаем
+   в обычные блоки и убираем его отступы, высоты и линию слева у .info */
+.st-training .lesson-list li :is(table, tbody, tr, td, .link, .info) {
   display: block;
   width: 100% !important;
   height: auto !important;
+  min-height: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
   border: 0 !important;
   background: transparent !important;
+  text-align: left !important;
+  vertical-align: top !important;
 }
 
 .st-training .lesson-list li :is(a, .link) {
@@ -883,8 +889,10 @@ body {
   text-decoration: none !important;
 }
 
-/* иконка типа урока в макете не используется */
-.st-training .lesson-list li .item-image {
+/* иконки типа урока и статуса в макете не используются; заодно прячем любые
+   служебные ячейки таблицы без названия урока, чтобы не было пустого отступа слева */
+.st-training .lesson-list li :is(.item-image, .state-icon-block),
+.st-training .lesson-list li td:not(.info):not(:has(.title)) {
   display: none !important;
 }
 
