@@ -13,6 +13,10 @@
   'use strict';
 
   const CONFIG = {
+    // тема оформления: '' — синяя (основная школа), 'league' — красная «Высшая лига».
+    // Обычно задаётся в загрузчике школы (var THEME), а не здесь
+    theme: '',
+
     // главная обучения (баннер, быстрые ссылки, правая колонка). Кроме этих адресов
     // главной считается любая страница обучения со списком тренингов, см. pageKind()
     homePaths: ['/teach/control', '/teach/control/stream'],
@@ -53,8 +57,26 @@
     scheduleOpen: false   // раскрыт ли блок событий при загрузке
   };
 
-  // для превью и точечных правок без редактирования файла: window.ST_CONFIG = {...}
-  Object.assign(CONFIG, window.ST_CONFIG || {});
+  // Настройки, которые отличаются у темы. Цвета темы — в CSS (:root[data-st-theme])
+  const THEMES = {
+    league: {
+      banner: {
+        title: 'Высшая лига',
+        lines: [
+          'Программа Игоря Стоянова для практикующих мастеров и экспертов:',
+          'как превратить своё ремесло в имя, деньги и систему'
+        ],
+        image: '',
+        showText: true
+      }
+    }
+  };
+
+  // Порядок: значения выше → пресет темы → window.ST_CONFIG из загрузчика или превью
+  const userConfig = window.ST_CONFIG || {};
+  Object.assign(CONFIG, THEMES[userConfig.theme] || {}, userConfig);
+  // ставим сразу, не дожидаясь загрузки страницы, — чтобы не мелькал синий
+  if (CONFIG.theme) document.documentElement.dataset.stTheme = CONFIG.theme;
 
   const ICONS = {
     search: '<circle cx="11" cy="11" r="7.5"/><path d="m21 21-4.6-4.6"/>',

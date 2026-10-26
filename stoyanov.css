@@ -32,6 +32,17 @@
   --st-muted-card: #9B9B9B;    /* фон приглушённой быстрой ссылки */
   --st-chip: #EFEFEF;          /* фон пункта «Полезные ссылки» */
   --st-line: #3F3F3F;          /* линия у заголовка «Тренинги» */
+  --st-avatar: #0B1A47;        /* иконка пустого аватара */
+
+  /* баннер и свечение в шапке урока */
+  --st-banner-title: #FFFFFF;
+  --st-banner-bg:
+    radial-gradient(60% 90% at 100% 15%, #E3EEFF 0%, #9EC1FF 22%, rgba(30, 110, 255, 0.9) 48%, rgba(2, 40, 170, 0) 75%),
+    radial-gradient(70% 120% at 75% 100%, #1E7BFF 0%, rgba(1, 56, 173, 0.6) 40%, rgba(1, 20, 90, 0) 75%),
+    radial-gradient(50% 70% at 20% 20%, rgba(2, 40, 160, 0.9) 0%, rgba(1, 10, 60, 0) 100%),
+    linear-gradient(180deg, #000208 0%, #01000C 100%);
+  --st-glow-1: rgba(1, 67, 206, 0.32);
+  --st-glow-2: rgba(110, 155, 255, 0.5);
 
   /* скругления и тени */
   --st-r-s: 8px;
@@ -67,6 +78,25 @@
   --st-ico-bag: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z'/%3E%3Cpath d='M3 6h18M16 10a4 4 0 0 1-8 0'/%3E%3C/svg%3E");
   --st-ico-close: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M18 6 6 18M6 6l12 12'/%3E%3C/svg%3E");
   --st-ico-dot: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3C/svg%3E");
+}
+
+
+/* Тема «Высшая лига» — та же светлая вёрстка, красный акцент и тёмно-красный баннер.
+   Включается в загрузчике школы: var THEME = 'league' (JS ставит html[data-st-theme]) */
+:root[data-st-theme="league"] {
+  --st-accent: #E00A06;
+  --st-accent-hover: #B40004;
+  --st-accent-soft: rgba(224, 10, 6, 0.08);
+  --st-navy: #9B0003;
+  --st-avatar: #2C2C2C;
+  --st-banner-title: #FF1A12;
+  --st-banner-bg:
+    radial-gradient(55% 110% at 88% 115%, rgba(255, 30, 15, 0.85) 0%, rgba(160, 0, 3, 0.5) 40%, rgba(60, 0, 0, 0) 75%),
+    radial-gradient(40% 80% at 100% 0%, rgba(255, 80, 60, 0.5) 0%, rgba(120, 0, 0, 0) 70%),
+    radial-gradient(50% 70% at 15% 20%, rgba(110, 0, 4, 0.55) 0%, rgba(20, 0, 0, 0) 100%),
+    linear-gradient(180deg, #0A0303 0%, #050101 100%);
+  --st-glow-1: rgba(224, 10, 6, 0.2);
+  --st-glow-2: rgba(255, 90, 70, 0.32);
 }
 
 
@@ -279,7 +309,7 @@ body {
   height: 42px;
   border-radius: 50%;
   background: var(--st-bg);
-  color: #0B1A47;
+  color: var(--st-avatar);
   flex-shrink: 0;
 }
 
@@ -574,11 +604,7 @@ body {
   overflow: hidden;
   border-radius: var(--st-r-m);
   color: #FFFFFF;
-  background:
-    radial-gradient(60% 90% at 100% 15%, #E3EEFF 0%, #9EC1FF 22%, rgba(30, 110, 255, 0.9) 48%, rgba(2, 40, 170, 0) 75%),
-    radial-gradient(70% 120% at 75% 100%, #1E7BFF 0%, rgba(1, 56, 173, 0.6) 40%, rgba(1, 20, 90, 0) 75%),
-    radial-gradient(50% 70% at 20% 20%, rgba(2, 40, 160, 0.9) 0%, rgba(1, 10, 60, 0) 100%),
-    linear-gradient(180deg, #000208 0%, #01000C 100%);
+  background: var(--st-banner-bg);
   background-size: cover;
   background-position: center;
 }
@@ -592,7 +618,7 @@ body {
   font: 600 64px/1 var(--st-font-display);
   letter-spacing: 0.01em;
   text-transform: uppercase;
-  color: inherit;
+  color: var(--st-banner-title);
 }
 
 .st-banner__text {
@@ -1260,8 +1286,8 @@ body {
   border: 0 !important;
   border-radius: var(--st-r-m);
   background:
-    radial-gradient(40% 130% at 32% 120%, rgba(1, 67, 206, 0.32) 0%, rgba(1, 67, 206, 0) 100%),
-    radial-gradient(34% 120% at 82% 105%, rgba(110, 155, 255, 0.5) 0%, rgba(110, 155, 255, 0) 100%),
+    radial-gradient(40% 130% at 32% 120%, var(--st-glow-1) 0%, transparent 100%),
+    radial-gradient(34% 120% at 82% 105%, var(--st-glow-2) 0%, transparent 100%),
     var(--st-surface) !important;
 }
 
